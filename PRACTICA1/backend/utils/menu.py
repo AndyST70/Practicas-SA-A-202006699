@@ -1,5 +1,5 @@
 
-from inventario.gestor_inventario import GestorInventario
+from models.gestor_inventario import GestorInventario
 
 G_I = GestorInventario()
 
