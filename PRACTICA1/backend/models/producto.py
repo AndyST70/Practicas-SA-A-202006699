@@ -8,7 +8,11 @@ class Producto:
         self.cantidad = cantidad
         self.precio = precio
         
-    def __str__(self):
-         return f"{self.id:<5} | {self.nombre:<15} | {self.cantidad:^10} | Q{self.precio:>8.2f}"
-    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nombre": self.nombre,
+            "cantidad": self.cantidad,
+            "precio": self.precio
+        }
     
