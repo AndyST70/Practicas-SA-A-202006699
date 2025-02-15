@@ -8,7 +8,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AppRouterCacheProvider>
-            <MuiTheme themeName="azul" >  
+             <MuiTheme themeName="azul" >  {/* importacion de tema a trabajar*/}
               <CssBaseline/>
                   {children}
             </MuiTheme>            

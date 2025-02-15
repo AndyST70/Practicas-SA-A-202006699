@@ -3,7 +3,7 @@ class Producto:
     
     def __init__ (self, nombre:str, cantidad:int, precio:float):
         self.id = Producto.contador_id
-        Producto.contador_id += 1
+        Producto.contador_id += 1 # Incrementa el contador de id
         self.nombre = nombre
         self.cantidad = cantidad
         self.precio = precio

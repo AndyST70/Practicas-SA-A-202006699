@@ -7,7 +7,7 @@ def agregar_producto():
     nombre = request.form["nombre"]
     cantidad = request.form["cantidad"]
     precio = request.form["precio"]
-    
+    #Validaciones de los campos
     if not nombre or not cantidad or not precio:
         return jsonify({"error": 1, "message": "Todos los campos son obligatorios"}), 400
 
@@ -17,6 +17,7 @@ def agregar_producto():
     if any(p["nombre"].lower() == nombre.lower() for p in G_I.mostrar_productos()):
         return jsonify({"error": 1, "message": "Ya existe un producto con este nombre"}), 400
 
+    #Creación del objeto producto
     producto = Producto(nombre, int(cantidad), float(precio))
     G_I.agregar_producto(producto)
 

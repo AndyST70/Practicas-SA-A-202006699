@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { MostrarProductos } from 'endpoints/mostrar';
 import { eliminar } from 'endpoints/eliminar';
 import { Agregar } from 'endpoints/agregar';
+import { OrdenarPorPrecio, OrdenarPorCantidad } from 'endpoints/ordenar';
 import ProductTable from './components';
 import {
   Container,
@@ -17,21 +18,21 @@ import {
 } from '@mui/material';
 
 export default function HomeView() {
-
+ //  para mostrar productos
   const [productos, setProductos] = useState([]);
   const [filteredProductos, setFilteredProductos] = useState([]);
 
-
+ // para agregar productos
   const [nombre, setNombre] = useState("");
   const [cantidad, setCantidad] = useState("");
   const [precio, setPrecio] = useState("");
   const [mensaje, setMensaje] = useState("");
 
-
+ // para buscar productos
   const [search, setSearch] = useState("");
   const [searchMensaje, setSearchMensaje] = useState("");
 
-
+ // paginacion
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -61,7 +62,7 @@ export default function HomeView() {
       setMensaje("Todos los campos son obligatorios.");
       return;
     }
-
+    // Crear un objeto FormData
     const formData = new FormData();
     formData.append("nombre", nombre);
     formData.append("cantidad", cantidad);
@@ -76,6 +77,7 @@ export default function HomeView() {
       setPrecio("");
       cargarProductos();
     } else {
+      // Mostrar mensaje de error
       setMensaje(response.message);
     }
   };
@@ -100,20 +102,26 @@ export default function HomeView() {
   };
 
 
-  const handleOrdenarPorPrecio = () => {
-    const ordenados = [...filteredProductos].sort(
-      (a, b) => Number(a.precio) - Number(b.precio)
-    );
-    setFilteredProductos(ordenados);
+  const handleOrdenarPorPrecio = async () => {
+    const response = await OrdenarPorPrecio();
+    if (response.error === 0) {
+      setProductos(response.productos || []);
+      // Si había resultados de búsqueda, se limpian
+      setSearchMensaje("");
+    } else {
+      setSearchMensaje(response.message || "Error al ordenar por precio.");
+    }
   };
 
-  const handleOrdenarPorCantidad = () => {
-    const ordenados = [...filteredProductos].sort(
-      (a, b) => Number(a.cantidad) - Number(b.cantidad)
-    );
-    setFilteredProductos(ordenados);
+  const handleOrdenarPorCantidad = async () => {
+    const response = await OrdenarPorCantidad();
+    if (response.error === 0) {
+      setProductos(response.productos || []);
+      setSearchMensaje("");
+    } else {
+      setSearchMensaje(response.message || "Error al ordenar por cantidad.");
+    }
   };
-
   // Paginación
   const paginatedProductos = filteredProductos.slice(
     page * rowsPerPage,
