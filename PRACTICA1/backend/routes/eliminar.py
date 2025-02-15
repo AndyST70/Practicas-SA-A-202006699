@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from main import app, G_I
 
-@app.route('/eliminar', methods=['DELETE'])
+@app.route('/eliminar', methods=['POST'])
 def eliminarproducto():
     nombre = request.form['nombre']
     if not nombre:
