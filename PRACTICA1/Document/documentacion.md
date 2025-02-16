@@ -7,9 +7,8 @@
 
 *Universidad de San Carlos de Guatemala*  
 *Escuela de Ingeniería en Ciencias y Sistemas, Facultad de Ingenieria*  
-*Laboratorio Analisis y Diseño de sistemas 2, Vacaciones de Diciembre 2024.*  
-*Seccion P - Grupo 1*  
-
+*Laboratorio Software Avanzado 1 - A, Primer Semestre 2025.*  
+*Nombre: Andy Ezequiel Sanic Tiul - 202006699*  
 
 # Principios SOLID - Ejemplo de Pizzería
 
