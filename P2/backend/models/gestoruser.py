@@ -1,6 +1,6 @@
-from app.db import conectar_db
-from app.models.user import User
-from app.utils.encription import encriptar, verificar_password
+from db import conectar_db
+from models.user import User
+from utils.encription import encriptar, verificar_password
 
 class GestorUser:
     @staticmethod

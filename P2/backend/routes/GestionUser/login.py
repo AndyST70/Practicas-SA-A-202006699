@@ -1,8 +1,11 @@
 from flask import  request, jsonify
-from app.models.gestoruser import GestorUser
-from app.utils.encription import verificar_password
-from app.utils.token import generate_jwt
-import main as app
+from models.gestoruser import GestorUser
+from utils.encription import verificar_password
+from utils.security import Security 
+from main import app
+
+
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -15,7 +18,7 @@ def login():
     if not usuario or not verificar_password(password, usuario.password):
         return jsonify({"message": "Credenciales incorrectas"}), 401
 
-    access_token = generate_jwt(usuario.email)
+    access_token = Security.generate_token(usuario)
 
     return jsonify({"error":0, "message": "Login exitoso", "access_token": access_token})
 

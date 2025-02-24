@@ -1,5 +1,5 @@
 from flask import  request, jsonify
-from app.models.gestoruser import GestorUser
+from models.gestoruser import GestorUser
 from main import app
 
 
