@@ -7,7 +7,7 @@ class GestorUser:
     def register_user(email, password, nombre):
         conexion = conectar_db()
         cursor = conexion.cursor()
-        hashed_password = encriptar(password)  # Asegurar que la contraseña se almacene encriptada
+        hashed_password = encriptar(password)  # Asegura que la contraseña se almacene encriptada
         
         query = '''INSERT INTO 
         Usuarios (nombre, email, password_hash, created_at)

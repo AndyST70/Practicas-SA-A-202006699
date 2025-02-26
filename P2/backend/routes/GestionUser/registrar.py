@@ -5,10 +5,9 @@ from main import app
 
 @app.route('/register', methods=['POST'])
 def register():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
-    nombre = data.get('nombre')
+    email = request.form["email"]
+    password = request.form["password"]
+    nombre = request.form["nombre"]
 
     if GestorUser.search_user(email):
         return jsonify({"error": 1, "message": "Ya existe un usuario con este email"}), 400
