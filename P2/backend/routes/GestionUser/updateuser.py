@@ -3,11 +3,10 @@ from models.gestoruser import GestorUser
 from main import app
 
 
-@app.route('/update_user', methods=['POST'])
+@app.route('/recuperar', methods=['POST'])
 def update_user():
-    data = request.json
-    email = data.get('email')
-    new_password = data.get('new_password')
+    email = request.form["email"]
+    new_password = request.form["new_password"]
 
     usuario = GestorUser.search_user(email)
 
