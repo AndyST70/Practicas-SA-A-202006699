@@ -12,7 +12,7 @@ class Security:
         """Genera un JWT con duración de 10 minutos"""
         payload = {
             'iat': datetime.datetime.now(tz=cls.tz),
-            'exp': datetime.datetime.now(tz=cls.tz) + datetime.timedelta(minutes=10),
+            'exp': datetime.datetime.now(tz=cls.tz) + datetime.timedelta(minutes=1),
             'email': authenticated_user.email,  # Identificador del usuario
             'nombre': authenticated_user.nombre,
             'roles': ['User']  # En el futuro podríamos agregar roles dinámicos
