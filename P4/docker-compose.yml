@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: catalogo_db
+    ports:
+      - "3306:3306"
+
+  catalogo-ms:
+    build: ./catalogo-ms
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mysql
+
+  registro-ms:
+    build: ./registro-ms
+    ports:
+      - "4001:4001"
+    depends_on:
+      - mysql
+
+  auth-ms:
+    build: ./auth-ms
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mysql
+
+  pedidos-ms:
+    build: ./pedidos-ms
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-ms
