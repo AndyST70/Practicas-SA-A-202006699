@@ -1,34 +1,60 @@
 from flask import request, jsonify
 import os
 from config.db import get_connection
-from utils.security import verify_token
 from main import app
 
-@app.route('/pedidos', methods=['POST'])
+@app.route('/realizar_pedidos', methods=['POST'])
 def crear_pedido():
-    """Crear un nuevo pedido"""
-    token_data = verify_token(request.headers)
-    if not token_data:
-        return jsonify({"error": 1, "message": "Token inválido o expirado"}), 401
+    data = request.form
 
-    usuario_id = token_data["id"]
-    productos = request.json.get("productos", [])
-    total = sum(p["precio"] * p["cantidad"] for p in productos)
+    usuario_id = data['usuario_id']
+    productos_id = data['producto_id']
+    cantidad = data['cantidad']
+    
+    if not usuario_id or not productos_id or not cantidad:
+        return jsonify({'error': 1, 'message': 'Faltan datos'}), 400
+    
+    con = get_connection()
+    cursor = con.cursor()
+    
+    # obtener el precio de los productos
+    query = '''
+        SELECT precio FROM productos WHERE id = %s
+    '''
+    values = (productos_id,)
+    cursor.execute(query, values)
+    precios = cursor.fetchall()
 
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO pedidos (usuario_id, total) VALUES (%s, %s)", (usuario_id, total))
+    if not precios:
+        return jsonify({'error': 1, 'message': 'Producto no encontrado'}), 404
+    
+    precio_unitario = float(precios[0][0])
+    resultado = precio_unitario * float(cantidad)
+    
+    query = '''
+        INSERT INTO 
+        pedidos (usuario_id, total) 
+        VALUES (%s, %s)
+    '''
+    values = (usuario_id, resultado)
+    cursor.execute(query, values)
     pedido_id = cursor.lastrowid
-
-    for p in productos:
-        cursor.execute("INSERT INTO detalles_pedido (pedido_id, producto_id, cantidad, precio_unitario) VALUES (%s, %s, %s, %s)",
-                       (pedido_id, p["id"], p["cantidad"], p["precio"]))
-
-    conn.commit()
+    
+    #insertar detalle de pedido
+    
+    query = '''
+        INSERT INTO 
+        detalles_pedido (pedido_id, producto_id, cantidad, precio_unitario)
+        VALUES (%s, %s, %s, %s)
+    '''
+    values = (pedido_id, productos_id, cantidad, precio_unitario)
+    cursor.execute(query, values)
+    con.commit()
+    con.close()
     cursor.close()
-    conn.close()
+        
+    return jsonify({'message': 'Pedido creado con éxito'})
 
-    return jsonify({"message": "Pedido creado con éxito", "pedido_id": pedido_id})
 
 @app.route('/pedidos', methods=['GET'])
 def obtener_pedidos():
