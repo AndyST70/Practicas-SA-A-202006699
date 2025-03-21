@@ -13,14 +13,18 @@ services:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   catalogo-ms:
-    build: ./microservicios/catalogo-ms
+    build: 
+      context: ./microservicios/catalogo-ms
+      dockerfile: docker/Dockerfile       
     ports:
       - "4000:4000"
     depends_on:
       - mysql
 
   registro-ms:
-    build: ./microservicios/registro-ms
+    build: 
+      context: ./microservicios/registro-ms
+      dockerfile: docker/Dockerfile
     ports:
       - "4001:4001"
     depends_on:
