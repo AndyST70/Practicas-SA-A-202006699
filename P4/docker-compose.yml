@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456789
+      MYSQL_DATABASE: catalogo_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  catalogo-ms:
+    build: ./microservicios/catalogo-ms
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mysql
+
+  registro-ms:
+    build: ./microservicios/registro-ms
+    ports:
+      - "4001:4001"
+    depends_on:
+      - mysql
+
+  usuario-ms:
+    build: ./microservicios/usuario-ms
+    ports:
+      - "5003:5003"
+    depends_on:
+      - mysql
+
+  pedido-ms:
+    build: ./microservicios/pedido-ms
+    ports:
+      - "5002:5002"
+    depends_on:
+      - mysql
