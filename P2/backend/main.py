@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)  
 
 @app.route('/')
 def index():
@@ -12,6 +12,9 @@ def index():
 from routes.GestionUser.login import *
 from routes.GestionUser.registrar import *
 from routes.GestionUser.updateuser import *
+from routes.GestionUser.sesion import *
+from routes.GestionUser.logout import *
+
 
 
 if __name__ == '__main__':
