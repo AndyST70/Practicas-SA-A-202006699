@@ -1,0 +1,48 @@
+
+
+# Shopping System - Microservicios
+
+Proyecto de arquitectura basada en microservicios para un sistema de compras en línea.
+
+##  Estructura de Servicios
+
+| Servicio            | Puerto | Descripción                        |
+|---------------------|--------|------------------------------------|
+| productos-service   | 5001   | Catálogo, carrito, ofertas         |
+| compras-service     | 5002   | Checkout, órdenes de compra        |
+| usuarios-service    | 5003   | Gestión de usuarios, devoluciones  |
+| pagos-service       | 5004   | Procesamiento de pagos             |
+| reportes-service    | 5005   | Reportes de ventas e inventarios   |
+| Redis               | 6379   | Cache de sesiones y datos rápidos  |
+| MySQL (por servicio)| 3306+  | Base de datos independiente        |
+
+##  Requisitos
+
+- Docker
+- Docker Compose
+
+##  Despliegue
+
+1. Clona el repositorio
+
+```bash
+git clone https://github.com/AndyST70/Practicas-SA-A-202006699
+cd tu-repo
+```
+
+2. Ejecuta los servicios
+```
+docker-compose up --build
+```
+
+3.  Accede a los servicios
+Productos: http://localhost:5001
+Compras: http://localhost:5002
+Usuarios: http://localhost:5003
+Pagos: http://localhost:5004
+Reportes: http://localhost:5005
+
+```
+Nota: 
+Cada servicio tiene su propia base de datos MySQL.
+```
