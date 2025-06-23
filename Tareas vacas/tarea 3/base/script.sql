@@ -130,5 +130,27 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
+-- ambiente
 
-INSERT INTO ambiente (idambiente, usuario, password_ci, rol)VALUES (1, 'admin', 'admin123', 'admin');
+INSERT INTO ambiente (idambiente, usuario, password_ci, rol)VALUES (1, 'admin', 'admin123', 'DEV');
+-- CI 
+INSERT INTO ci (nombre_ci, tipo_ci, descripcion, numero_serie, version, estado, responsable, fecha_adquisicion, ubicacion, licencia, idambiente)
+VALUES 
+('Servidor App', 0, 'Servidor de aplicaciones principal', 'SRV001', '1.0', 'Activo', 'Infraestructura', NOW(), 'DataCenter 1', 'LIC123', 1),
+('Base de Datos', 0, 'MySQL para app financiera', 'DB001', '5.7', 'Activo', 'DBA', NOW(), 'DataCenter 2', 'LIC456', 1);
+
+-- Documento
+INSERT INTO documento (nombre, ruta)
+VALUES ('Manual Configuración', '/docs/manual_config.pdf');
+
+-- Bitácora de cambio
+INSERT INTO bitacora_cambio (descripcion, fec_actual, fec_anterior)
+VALUES ('Actualización de versión', NOW(), '2023-01-01 00:00:00');
+
+-- Cambio (relacionado a CI id 1)
+INSERT INTO cambio (nombre_ci, descripcion, id_doc, id_ci, id_bitacora)
+VALUES ('Servidor App', 'Se actualizó a versión 1.0', 1, 1, 1);
+
+-- Arbol (relación padre-hijo: servidor -> base de datos)
+INSERT INTO arbol (padre, hijo, tipo, idci)
+VALUES (1, 2, 'dependencia', 1);

@@ -97,6 +97,41 @@ def crear_ci():
 
     return jsonify({"error": 0, "message": "CI creado correctamente"}), 201
 
+
+@app.route('/ci/<int:id>', methods=['PUT'])
+def actualizar_ci(id):
+    user = requiere_token()
+    if not user:
+        return jsonify({"error": 1, "message": "Token inválido"}), 401
+
+    data = request.form
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    query = '''
+        UPDATE ci SET 
+            nombre_ci = %s, tipo_ci = %s, estado = %s, idambiente = %s,
+            fecha_adquisicion = %s, responsable = %s, ubicacion = %s,
+            descripcion = %s, numero_serie = %s, version = %s, licencia = %s
+        WHERE id_ci = %s
+    '''
+    values = (
+        data.get('nombre_ci'), data.get('tipo'), data.get('estado'),
+        data.get('ambiente'), data.get('fecha_adquisicion'),
+        data.get('responsable'), data.get('ubicacion'),
+        data.get('descripcion'), data.get('numero_serie'),
+        data.get('version'), data.get('licencia'), id
+    )
+
+    cursor.execute(query, values)
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"error": 0, "message": "CI actualizado"}), 200
+
+
+
 @app.route('/ci/<int:id>', methods=['GET'])
 def obtener_ci(id):
     user = requiere_token()
@@ -138,3 +173,37 @@ def eliminar_ci(id):
     return jsonify({"error": 0, "message": "CI eliminado correctamente"}), 200
 
 
+@app.route('/buscar_ci', methods=['POST'])
+def buscar_ci():
+    user = requiere_token()
+    if not user:
+        return jsonify({"error": 1, "message": "Token inválido"}), 401
+
+    data = request.form
+    nombre = data.get('nombre_ci')
+    tipo = data.get('tipo_ci')
+    estado = data.get('estado')
+
+    condiciones = []
+    valores = []
+
+    if nombre:
+        condiciones.append("nombre_ci LIKE %s")
+        valores.append(f"%{nombre}%")
+    if tipo:
+        condiciones.append("tipo_ci = %s")
+        valores.append(tipo)
+    if estado:
+        condiciones.append("estado = %s")
+        valores.append(estado)
+
+    caso = " AND ".join(condiciones) if condiciones else "1"
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(f"SELECT * FROM ci WHERE {caso}", valores)
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"error": 0, "data": data}), 200
