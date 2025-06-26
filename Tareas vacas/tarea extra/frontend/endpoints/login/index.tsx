@@ -21,3 +21,4 @@ export const login = async ({ email, password }) => { //para soportar json error
     credentials: "include",
   }).then(res => res.json());
 };
+// 
